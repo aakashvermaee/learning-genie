@@ -1,0 +1,28 @@
+{
+  "name": "mongo-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "ndb index.js"
+  },
+  "engines": {
+    "node": "10.0.0"
+  },
+  "author": "Ankit Chawla",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.1",
+    "dotenv": "^6.2.0",
+    "fastify": "^1.13.4",
+    "lodash": "^4.17.5",
+    "mongodb": "^3.0.4",
+    "mongoose": "^5.0.9"
+  },
+  "devDependencies": {
+    "ndb": "^1.0.24"
+  }
+}

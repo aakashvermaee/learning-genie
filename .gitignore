@@ -1,10 +1,8 @@
-app/node_modules/
+node_modules
 
 app/release-builds
 app/dist
-backend/node_modules/
 
-learning-genie-portal/node_modules/
 learning-genie-portal/dist/
 
 .vscode/
