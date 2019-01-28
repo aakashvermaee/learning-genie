@@ -5,5 +5,5 @@ app/dist
 
 learning-genie-portal/dist/
 
-.vscode/
+.vscode
 *.DS_Store
