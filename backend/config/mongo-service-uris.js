@@ -1,33 +1,33 @@
 const mongoServiceBaseUri = "http://localhost:2019"
 
-const answer = {
+const answerApiRoutes = {
   postAnswer: `${mongoServiceBaseUri}/api/answer`
 };
 
-const user = {
+const userApiRoutes = {
   getUser: `${mongoServiceBaseUri}/api/user`,
   getUsers: `${mongoServiceBaseUri}/api/users`,
-  getUsersById: `${mongoServiceBaseUri}/api/users`,
-  getUsersDataById: `${mongoServiceBaseUri}/api/usersdata`,
-  patchUserById: `${mongoServiceBaseUri}/api/user`
+  getUsersById: `${mongoServiceBaseUri}/api/users/:id`,
+  getUsersDataById: `${mongoServiceBaseUri}/api/usersdata/:id`,
+  patchUserById: `${mongoServiceBaseUri}/api/user/:id`
 };
 
-const team = {
+const teamApiRoutes = {
   getTeams: `${mongoServiceBaseUri}/api/teams`,
   createOrPostTeam: `${mongoServiceBaseUri}/api/team`,
-  patchTeamById: `${mongoServiceBaseUri}/api/team`
+  patchTeamById: `${mongoServiceBaseUri}/api/team/:id`
 };
 
-const question = {
+const questionApiRoutes = {
   postQuestion: `${mongoServiceBaseUri}/api/question`,
   getQuestions: `${mongoServiceBaseUri}/api/questions`,
-  getQuestionsById: `${mongoServiceBaseUri}/api/questions`,
-  getQuestionsDataById: `${mongoServiceBaseUri}/api/questionsdata`
+  getQuestionsById: `${mongoServiceBaseUri}/api/questions/:id`,
+  getQuestionsDataById: `${mongoServiceBaseUri}/api/questionsdata/:id`
 };
 
 module.exports = {
-  team,
-  user,
-  answer,
-  question
+  teamApiRoutes,
+  userApiRoutes,
+  answerApiRoutes,
+  questionApiRoutes
 }
