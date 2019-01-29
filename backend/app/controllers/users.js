@@ -2,6 +2,9 @@ const {pick} = require('lodash');
 
 const { Answer, Question, User, Team } = require('../models');
 
+const mongoUserApi = require("../../config/mongo-service-uris").user;
+const axios = require("axios");
+
 const user = {
     getUser: function (req, res, id) {
         const token = req.headers['x-auth'];
@@ -17,14 +20,14 @@ const user = {
     },
     getUsers: function (req, res) {
         const token = req.headers['x-auth'];
-        User
-            .findOne({ token })
-            .then((user) => {
-                cb.getUsersSuccess(res, user);
-            })
-            .catch((err) => {
-                process.logger(undefined, err);
-            });
+        axios
+        .get(mongoUserApi.getUsers, {
+            headers: {
+                "x-auth": token
+            }
+        })
+        .then((resolve) => console.log(resolve))
+        .catch((e) => console.log(e));
     },
     getUsersData: function (req, res, id) {
         const token = req.headers['x-auth'];
