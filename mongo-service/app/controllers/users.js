@@ -2,12 +2,7 @@ const { pick } = require("lodash");
 
 const debug = require("debug")(process.env["DEBUG"]);
 
-const {
-    Answer,
-    Question,
-    User,
-    Team
-} = require("../models");
+const { Answer, Question, User, Team } = require("../models");
 
 const user = {
     getUser: async function (req, res, id) {
@@ -19,9 +14,7 @@ const user = {
             .then((user) => {
                 cb.getUserSuccess(res, user, id);
             })
-            .catch((err) => {
-                debug(err);
-            });
+            .catch(res.send({ "err": e }));
     },
     getUsers: async function (req, res) {
         const token = req.headers["x-auth"];
@@ -32,9 +25,7 @@ const user = {
             .then((user) => {
                 cb.getUsersSuccess(res, user);
             })
-            .catch((err) => {
-                debug(err);
-            });
+            .catch(res.send({ "err": e }));
     },
     getUsersData: async function (req, res, id) {
         const token = req.headers["x-auth"];
@@ -45,9 +36,7 @@ const user = {
             .then((user) => {
                 cb.getUsersDataSuccess(req, res, user, id);
             })
-            .catch((err) => {
-                debug(err);
-            });
+            .catch(res.send({ "err": e }));
     },
     patchUser: async function (req, res, id) {
         const token = req.headers["x-auth"];
@@ -58,17 +47,14 @@ const user = {
             .then((user) => {
                 cb.patchUserSuccess(req, res, user, id);
             })
-            .catch((err) => {
-                debug(err);
-            });
+            .catch(res.send({ "err": e }));
     }
 }
 
 const cb = {
     getUserSuccess: async function (res, user, id) {
-        if (user) {
-            user.isAdmin
-            ? User
+        if (user && user.isAdmin) {
+            User
                 .findById(id || user.id)
                 .then((usr) => {
                     if (!usr) {
@@ -85,41 +71,33 @@ const cb = {
                             .then(answers => {
                                 res.send(answers)
                             })
+                            .catch(res.send({ "err": e }));
                     }
-                }) :
-                res
-                .status(403)
-                .send("UnAuthorized");
+                })
+                .catch(res.send({ "err": e }));
         } else {
-            res
-                .status(401)
-                .send();
+            res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
     },
     "getUsersSuccess": async function (res, user) {
-        if (user) {
-            user.isAdmin === true ?
-                User
+        if (user && user.isAdmin) {
+            User
                 .find({}).populate("team")
                 .then((users) => {
                     res.send({
                         users
                     })
-                }) :
-                res
-                .status(403)
-                .send("UnAuthorized");
+                })
+                .catch(res.send({ "err": e }));
         } else {
-            res
-                .status(401)
-                .send();
+            res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
     },
     getUsersDataSuccess: async (req, res, user, id) => {
-        if (user) {
-            user.isAdmin === true ?
-                User
-                .findById(id || user.id)
+        const _id = id || user.id;
+        if (user && user.isAdmin) {
+            User
+                .findById(_id)
                 .then((usr) => {
                     if (!usr) {
                         res
@@ -135,14 +113,14 @@ const cb = {
                                 total = count;
                                 Answer
                                     .count({
-                                        u_id: req.params.id,
+                                        u_id: _id,
                                         correct: true
                                     })
                                     .then((count, err) => {
                                         correct = count
                                         Answer
                                             .count({
-                                                u_id: req.params.id,
+                                                u_id: _id,
                                                 correct: false
                                             })
                                             .then((count, err) => {
@@ -154,29 +132,24 @@ const cb = {
                                                     "notAnswered": notAnswered
                                                 })
                                             })
+                                            .catch(res.send({ "err": e }));
                                     })
+                                    .catch(res.send({ "err": e }));
                             });
                     }
-                }) :
-                res
-                .status(403)
-                .send("UnAuthorized");
+                });
         } else {
-            res
-                .status(401)
-                .send();
+            res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
     },
     patchUserSuccess: async (req, res, user, id) => {
-        if (user) {
-            user.isAdmin === true ?
-                User
-                .findById(id || user.id)
+        const _id = id || user.id;
+        if (user && user.isAdmin) {
+            User
+                .findById(_id)
                 .then((usr) => {
                     if (!usr) {
-                        res
-                            .status(404)
-                            .send()
+                        res.status(404).send()
                     } else {
                         let action = req.body.action;
                         switch (action) {
@@ -185,9 +158,9 @@ const cb = {
                                 usr
                                     .save()
                                     .then((user) => {
-                                        res.send("Success")
+                                        res.send({ status: 200, statusText: "Success", "msg": "User Updated!" });
                                     })
-                                    .catch(e => debug(e));
+                                    .catch(res.send({ "err": e }));
                                 break;
                             case "addTeam":
                                 Team.findById(req.body.team).then((tm) => {
@@ -195,9 +168,9 @@ const cb = {
                                     usr
                                         .save()
                                         .then((user) => {
-                                            res.send("Success")
+                                            res.send({ status: 200, statusText: "Success", "msg": "Team Added!" });
                                         })
-                                        .catch(e => debug(e));
+                                        .catch(res.send({ "err": e }));
                                 })
                                 break;
                             case "removeTeam":
@@ -205,20 +178,16 @@ const cb = {
                                 usr
                                     .save()
                                     .then((user) => {
-                                        res.send("Success")
+                                        res.send({ status: 200, statusText: "Success", "msg": "Team Removed!" });
                                     })
-                                    .catch(e => debug(e));
+                                    .catch(res.send({ "err": e }));
                                 break;
                         }
                     }
-                }) :
-                res
-                .status(403)
-                .send("UnAuthorized");
+                })
+                .catch((e) => debug(e));
         } else {
-            res
-                .status(401)
-                .send();
+            res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
     }
 }
