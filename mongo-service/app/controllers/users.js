@@ -14,7 +14,7 @@ const user = {
             .then((user) => {
                 cb.getUserSuccess(res, user, id);
             })
-            .catch(res.send({ "err": e }));
+            .catch((e) => res.send({ "err": e }));
     },
     getUsers: async function (req, res) {
         const token = req.headers["x-auth"];
@@ -25,7 +25,7 @@ const user = {
             .then((user) => {
                 cb.getUsersSuccess(res, user);
             })
-            .catch(res.send({ "err": e }));
+            .catch((e) => res.send({ "err": e }));
     },
     getUsersData: async function (req, res, id) {
         const token = req.headers["x-auth"];
@@ -36,7 +36,7 @@ const user = {
             .then((user) => {
                 cb.getUsersDataSuccess(req, res, user, id);
             })
-            .catch(res.send({ "err": e }));
+            .catch((e) => res.send({ "err": e }));
     },
     patchUser: async function (req, res, id) {
         const token = req.headers["x-auth"];
@@ -47,7 +47,7 @@ const user = {
             .then((user) => {
                 cb.patchUserSuccess(req, res, user, id);
             })
-            .catch(res.send({ "err": e }));
+            .catch((e) => res.send({ "err": e }));
     }
 }
 
@@ -71,10 +71,10 @@ const cb = {
                             .then(answers => {
                                 res.send(answers)
                             })
-                            .catch(res.send({ "err": e }));
+                            .catch((e) => res.send({ "err": e }));
                     }
                 })
-                .catch(res.send({ "err": e }));
+                .catch((e) => res.send({ "err": e }));
         } else {
             res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
@@ -88,7 +88,7 @@ const cb = {
                         users
                     })
                 })
-                .catch(res.send({ "err": e }));
+                .catch((e) => res.send({ "err": e }));
         } else {
             res.send({ status: 401, statusText: "UnAuthorized", reason: "User is not an admin!" });
         }
@@ -132,9 +132,9 @@ const cb = {
                                                     "notAnswered": notAnswered
                                                 })
                                             })
-                                            .catch(res.send({ "err": e }));
+                                            .catch((e) => res.send({ "err": e }));
                                     })
-                                    .catch(res.send({ "err": e }));
+                                    .catch((e) => res.send({ "err": e }));
                             });
                     }
                 });
@@ -160,7 +160,7 @@ const cb = {
                                     .then((user) => {
                                         res.send({ status: 200, statusText: "Success", "msg": "User Updated!" });
                                     })
-                                    .catch(res.send({ "err": e }));
+                                    .catch((e) => res.send({ "err": e }));
                                 break;
                             case "addTeam":
                                 Team.findById(req.body.team).then((tm) => {
@@ -170,7 +170,7 @@ const cb = {
                                         .then((user) => {
                                             res.send({ status: 200, statusText: "Success", "msg": "Team Added!" });
                                         })
-                                        .catch(res.send({ "err": e }));
+                                        .catch((e) => res.send({ "err": e }));
                                 })
                                 break;
                             case "removeTeam":
@@ -180,7 +180,7 @@ const cb = {
                                     .then((user) => {
                                         res.send({ status: 200, statusText: "Success", "msg": "Team Removed!" });
                                     })
-                                    .catch(res.send({ "err": e }));
+                                    .catch((e) => res.send({ "err": e }));
                                 break;
                         }
                     }
