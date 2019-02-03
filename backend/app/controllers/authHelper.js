@@ -117,5 +117,20 @@ module.exports = {
         }
         process.logger(email);
         res.send(`${email} you are successfully logged in`);
+    },
+    checkTokenInReq: (req, res, next) => {
+        let token = req.headers["x-auth"] || undefined;
+
+        // if not token then, return and fail Auth
+        if (!token) {
+            return res.status(401).send({
+                "status":401,
+                "authStatus": false,
+                "reason": "Token not present!"
+            });
+        }
+
+        // if token is present then, execute middlewares in pipeline
+        next();
     }
 }

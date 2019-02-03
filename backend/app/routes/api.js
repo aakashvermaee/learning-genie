@@ -35,56 +35,56 @@ const apiRoutes = function (router, io) {
         authHelper.doLogout(req, res);
     });
 
-    router.post('/answer', (req, res) => {
+    router.post('/answer',  authHelper.checkTokenInReq, (req, res) => {
         let token = authHelper.getToken(req.headers['x-auth']);
         answer.postAnswer(req, res, io, token);
     });
 
-    router.post('/question', (req, res) => {
+    router.post('/question',  authHelper.checkTokenInReq, (req, res) => {
         question.postQuestion(req, res, io);
     });
 
-    router.get('/questions', (req, res) => {
+    router.get('/questions',  authHelper.checkTokenInReq, (req, res) => {
         question.getQuestions(req, res);
     });
 
-    router.get('/questions/:id', (req, res) => {
+    router.get('/questions/:id',  authHelper.checkTokenInReq, (req, res) => {
         question.getQuestionsId(req, res, req.params.id);
     });
 
-    router.get('/questionsdata/:id', (req, res) => {
+    router.get('/questionsdata/:id',  authHelper.checkTokenInReq, (req, res) => {
         question.getQuestionsDataId(req, res, req.params.id);
     });
 
-    router.get('/users', (req, res) => {
+    router.get('/users', authHelper.checkTokenInReq, (req, res) => {
         user.getUsers(req, res);
     });
 
-    router.get('/users/:id', (req, res) => {
+    router.get('/users/:id',  authHelper.checkTokenInReq, (req, res) => {
         user.getUser(req, res, req.params.id);
     });
 
-    router.get('/usersdata/:id', (req, res) => {
+    router.get('/usersdata/:id',  authHelper.checkTokenInReq, (req, res) => {
         user.getUsersData(req, res, req.params.id);
     })
 
-    router.get('/dashdata', (req, res) => {
+    router.get('/dashdata',  authHelper.checkTokenInReq, (req, res) => {
         dashboard.getDashData(req, res);
     });
 
-    router.get('/teams', (req, res) => {
+    router.get('/teams',  authHelper.checkTokenInReq, (req, res) => {
         team.getTeams(req, res);
     });
 
-    router.patch('/user/:id', (req,res) => {
+    router.patch('/user/:id',  authHelper.checkTokenInReq, (req,res) => {
         user.patchUser(req, res, req.params.id);
     })
 
-    router.post('/team', (req, res) => {
+    router.post('/team',  authHelper.checkTokenInReq, (req, res) => {
         team.createTeam(req, res);
     })
     
-    router.patch('/team/:id', (req, res) => {
+    router.patch('/team/:id',  authHelper.checkTokenInReq, (req, res) => {
         team.renameTeam(req, res, req.params.id);
     })
 
